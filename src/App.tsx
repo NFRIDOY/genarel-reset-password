@@ -86,6 +86,9 @@ function App() {
 
   return (
     <div className="App">
+      <header className="App-header">
+        <h1>Genarel Reset Password</h1>
+      </header>
       <div className="card">
         {decodedToken ? (
           <form onSubmit={handleSubmit}>
