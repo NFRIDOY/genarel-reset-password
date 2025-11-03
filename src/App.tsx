@@ -15,6 +15,12 @@ function App() {
   const [token, setToken] = useState('');
 
   useEffect(() => {
+    const handleTokenCleared = () => {
+      setToken('');
+      setDecodedToken(null);
+    };
+    window.addEventListener('token-cleared', handleTokenCleared);
+
     const token = new URLSearchParams(window.location.search).get('token') as string;
     setToken(token);
     if (token) {
@@ -26,6 +32,10 @@ function App() {
         console.error('Error decoding token:', error);
       }
     }
+
+    return () => {
+      window.removeEventListener('token-cleared', handleTokenCleared);
+    };
   }, []);
 
   

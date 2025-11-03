@@ -27,6 +27,8 @@ const ResetCountdown: React.FC<Props> = ({ token }) => {
                 } else {
                     setMinutes(0);
                     setSeconds(0);
+                    window.history.pushState({}, '', window.location.pathname);
+                    window.dispatchEvent(new Event('token-cleared'));
                 }
             };
             
