@@ -253,7 +253,7 @@ button:hover {
   justify-content: space-between;
   gap: 0rem;
   overflow: hidden;
-  width: calc(244px + 0rem);
+  width: calc(180px + 0rem);
   text-align: center;
 }
 .black-friday-component .timer .colon {

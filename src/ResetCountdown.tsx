@@ -18,7 +18,7 @@ const ResetCountdown: React.FC<Props> = ({ token }) => {
             const updateCountdown = () => {
                 const now = Date.now();
                 const diff = expirationTime - now;
-            
+
                 if (diff > 0) {
                     const totalSeconds = Math.floor(diff / 1000);
                     const mins = Math.floor(totalSeconds / 60);
@@ -33,13 +33,13 @@ const ResetCountdown: React.FC<Props> = ({ token }) => {
                     window.dispatchEvent(new Event('token-cleared'));
                 }
             };
-            
+
 
             updateCountdown(); // initial
             const interval = setInterval(updateCountdown, 1000);
             return () => clearInterval(interval);
         } catch (err) {
-            
+
         }
     }, [token]);
 
@@ -47,13 +47,14 @@ const ResetCountdown: React.FC<Props> = ({ token }) => {
         <div className="black-friday-component">
             <h1>{title}</h1>
             <div className="timer">
+                
                 <div className="item">
                     <div className="minutes">
                         <div className="min">
                             <span>{String(minutes).padStart(2, '0')}</span>
                         </div>
                     </div>
-                    <p>min</p>
+                    <p>M</p>
                 </div>
                 <span className="colon">:</span>
                 <div className="item">
@@ -62,7 +63,7 @@ const ResetCountdown: React.FC<Props> = ({ token }) => {
                             <span>{String(seconds).padStart(2, '0')}</span>
                         </div>
                     </div>
-                    <p>sec</p>
+                    <p>S</p>
                 </div>
             </div>
         </div>
