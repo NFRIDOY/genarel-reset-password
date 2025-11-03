@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
+import ResetCountdown from './ResetCountdown';
 
 interface DecodedToken {
   email: string;
@@ -19,7 +20,7 @@ function App() {
     if (token) {
       try {
         const decoded = jwtDecode<DecodedToken>(token);
-        console.log("decoded", decoded)
+        
         setDecodedToken(decoded);
       } catch (error) {
         console.error('Error decoding token:', error);
@@ -27,29 +28,7 @@ function App() {
     }
   }, []);
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   if (decodedToken) {
-  //     try {
-  //       const response = await fetch(decodedToken?.backend, {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         // body: JSON.stringify({ email: decodedToken?.email, newPassword }),
-  //         body: JSON.stringify({ newPassword: password }),
-  //       });
-  //       if (response.ok) {
-  //         alert('Password reset successfully!');
-  //       } else {
-  //         alert('Failed to reset password.');
-  //       }
-  //     } catch (error) {
-  //       console.error('Error resetting password:', error);
-  //       alert('An error occurred while resetting the password.');
-  //     }
-  //   }
-  // };
+  
 
 
 
@@ -62,14 +41,14 @@ function App() {
     }
 
     try {
-      console.log("decodedToken?.backend", decodedToken?.backend)
+      
       const urlWithToken = await `${decodedToken.backend}?token=${token as string}`;
       const response = await axios.post(urlWithToken, {
         auth: { newPassword: password },
         // Optionally include email if your backend expects it:
         // email: decodedToken.email,
       });
-      console.log("response", response)
+      
       if (response.status === 200) {
         alert('Password reset successfully!');
       } else {
@@ -116,6 +95,10 @@ function App() {
           </div>
         )}
       </div>
+      <footer>
+        <ResetCountdown token={token} />
+      </footer>
+      
     </div>
   );
 }
