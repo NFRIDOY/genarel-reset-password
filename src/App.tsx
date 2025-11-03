@@ -4,7 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 
 interface DecodedToken {
   email: string;
-  website: string;
+  backend: string;
 }
 
 function App() {
@@ -28,12 +28,13 @@ function App() {
     e.preventDefault();
     if (decodedToken) {
       try {
-        const response = await fetch(decodedToken?.website, {
+        const response = await fetch(decodedToken?.backend, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ email: decodedToken?.email, password }),
+          // body: JSON.stringify({ email: decodedToken?.email, newPassword }),
+          body: JSON.stringify({ newPassword: password }),
         });
         if (response.ok) {
           alert('Password reset successfully!');
