@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 
 interface DecodedToken {
   email: string;
@@ -10,9 +11,11 @@ interface DecodedToken {
 function App() {
   const [password, setPassword] = useState('');
   const [decodedToken, setDecodedToken] = useState<DecodedToken | null>(null);
+  const [token, setToken] = useState('');
 
   useEffect(() => {
-    const token = new URLSearchParams(window.location.search).get('token');
+    const token = new URLSearchParams(window.location.search).get('token') as string;
+    setToken(token);
     if (token) {
       try {
         const decoded = jwtDecode<DecodedToken>(token);
@@ -24,27 +27,60 @@ function App() {
     }
   }, []);
 
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (decodedToken) {
+  //     try {
+  //       const response = await fetch(decodedToken?.backend, {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         // body: JSON.stringify({ email: decodedToken?.email, newPassword }),
+  //         body: JSON.stringify({ newPassword: password }),
+  //       });
+  //       if (response.ok) {
+  //         alert('Password reset successfully!');
+  //       } else {
+  //         alert('Failed to reset password.');
+  //       }
+  //     } catch (error) {
+  //       console.error('Error resetting password:', error);
+  //       alert('An error occurred while resetting the password.');
+  //     }
+  //   }
+  // };
+
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (decodedToken) {
-      try {
-        const response = await fetch(decodedToken?.backend, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          // body: JSON.stringify({ email: decodedToken?.email, newPassword }),
-          body: JSON.stringify({ newPassword: password }),
-        });
-        if (response.ok) {
-          alert('Password reset successfully!');
-        } else {
-          alert('Failed to reset password.');
-        }
-      } catch (error) {
-        console.error('Error resetting password:', error);
-        alert('An error occurred while resetting the password.');
+
+    if (!decodedToken?.backend || !password) {
+      alert('Missing backend URL or password.');
+      return;
+    }
+
+    try {
+      console.log("decodedToken?.backend", decodedToken?.backend)
+      const urlWithToken = await `${decodedToken.backend}?token=${token as string}`;
+      const response = await axios.post(urlWithToken, {
+        auth: { newPassword: password },
+        // Optionally include email if your backend expects it:
+        // email: decodedToken.email,
+      });
+      console.log("response", response)
+      if (response.status === 200) {
+        alert('Password reset successfully!');
+      } else {
+        alert(`Failed to reset password. Status: ${response.status}`);
       }
+    } catch (error: any) {
+      console.error('Error resetting password:', error);
+      alert(
+        error.response?.data?.message ||
+        'An error occurred while resetting the password.'
+      );
     }
   };
 
