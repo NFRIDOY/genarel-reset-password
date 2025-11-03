@@ -9,6 +9,7 @@ type Props = {
 const ResetCountdown: React.FC<Props> = ({ token }) => {
     const [minutes, setMinutes] = useState<number>(0);
     const [seconds, setSeconds] = useState<number>(0);
+    const [title, setTitle] = useState<string>('Update Within');
 
     useEffect(() => {
         try {
@@ -27,6 +28,7 @@ const ResetCountdown: React.FC<Props> = ({ token }) => {
                 } else {
                     setMinutes(0);
                     setSeconds(0);
+                    setTitle("Time's up");
                     window.history.pushState({}, '', window.location.pathname);
                     window.dispatchEvent(new Event('token-cleared'));
                 }
@@ -37,13 +39,13 @@ const ResetCountdown: React.FC<Props> = ({ token }) => {
             const interval = setInterval(updateCountdown, 1000);
             return () => clearInterval(interval);
         } catch (err) {
-            console.error('Invalid token:', err);
+            
         }
     }, [token]);
 
     return (
         <div className="black-friday-component">
-            <h1>Update Within</h1>
+            <h1>{title}</h1>
             <div className="timer">
                 <div className="item">
                     <div className="minutes">

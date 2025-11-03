@@ -29,7 +29,7 @@ function App() {
         
         setDecodedToken(decoded);
       } catch (error) {
-        console.error('Error decoding token:', error);
+        
       }
     }
 
@@ -37,10 +37,6 @@ function App() {
       window.removeEventListener('token-cleared', handleTokenCleared);
     };
   }, []);
-
-  
-
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,7 +61,7 @@ function App() {
         alert(`Failed to reset password. Status: ${response.status}`);
       }
     } catch (error: any) {
-      console.error('Error resetting password:', error);
+      
       alert(
         error.response?.data?.message ||
         'An error occurred while resetting the password.'
